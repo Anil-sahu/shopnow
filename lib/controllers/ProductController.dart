@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopnow/localstorage/sharePreferences.dart';
 import 'package:shopnow/services/remote_service.dart';
@@ -14,21 +15,23 @@ class ProductController extends GetxController {
   var cardList = [].obs;
   var favoriteList = <String>[].obs;
   var favoriteProduct = [].obs;
+
   var isLoading = false.obs;
   var isSearch = false.obs;
   var isFilter = false.obs;
+
   final SharePreferenceService _sharePreferenceService =
       SharePreferenceService();
+
   @override
   void onInit() {
     fetchProduct();
-
     super.onInit();
   }
 
   filter() {
     isFilter.value = !isFilter.value;
-    isSearch.value = false;
+    stopSearch();
   }
 
   startSearch() {
@@ -89,11 +92,10 @@ class ProductController extends GetxController {
     var pro = await RemoteService.fetchProduct().whenComplete(() {
       loadingStop();
     });
+
     if (pro != null) {
       allProduct.value = pro.products;
-    } else {
-      print("no product available");
-    }
+    } else {}
   }
 
   void fetchGategory() async {
@@ -110,28 +112,27 @@ class ProductController extends GetxController {
     var pro = await RemoteService.searchProduct(search);
     loadingStop();
     if (pro != null) {
-      productSearchList.value = pro;
+      productSearchList.value = pro.products;
     }
   }
 
   getProductBycate(cate) async {
-    getCategoryProduct.value = [];
+    // getCategoryProduct.value = [];
     try {
       loadingStart();
       var pro = await RemoteService.getProductByCategory(cate);
       loadingStop();
-
-      getCategoryProduct.value = pro;
-    } catch (e) {}
+      if (pro != null) getCategoryProduct.value = pro.products;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   getFavoriteProduct() async {
     favoriteProduct.clear();
     for (var i = 0; i < favoriteList.length; i++) {
-      print(int.parse(favoriteList[i]));
       var pro = await RemoteService.getProduct(favoriteList[i]);
-      print("Favro--------------");
-      print(pro);
+
       if (pro != null) {
         favoriteProduct.add(pro);
       }
@@ -139,25 +140,12 @@ class ProductController extends GetxController {
   }
 
   getCardProduct() async {
-    favoriteProduct.clear();
+    cardList.clear();
     for (var i = 0; i < addToCardList.length; i++) {
-      print(int.parse(favoriteList[i]));
       var pro = await RemoteService.getProduct(addToCardList[i]);
-      print("Favro--------------");
-      print(pro);
       if (pro != null) {
         cardList.add(pro);
       }
     }
-    // getProductCategory() async {
-    //   var url = "https://dummyjson.com/products/categories";
-    //   try {
-    //     var response = await http.Client()
-    //         .get(Uri.parse(url))
-    //         .whenComplete(() => print("complete"));
-    //     var decode = jsonDecode(response.body);
-    //     print(decode);
-    //   } catch (e) {}
-    // }
   }
 }

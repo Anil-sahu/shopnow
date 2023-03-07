@@ -95,20 +95,17 @@ class _HomePageState extends State<HomePage> {
                                         : 0,
                                 color: Theme.of(context).selectedRowColor),
                             borderRadius: BorderRadius.circular(12),
-                            color: Get.find<ProductController>().isFilter.value
-                                ? Theme.of(context).selectedRowColor
-                                : Colors.white),
-                        child: Obx(() {
-                          return SvgPicture.asset("assets/filter.svg",
-                              width: 15,
-                              height: 15,
-                              colorFilter: ColorFilter.mode(
-                                  Get.find<ProductController>().isFilter.value
-                                      ? Colors.white
-                                      : Theme.of(context).selectedRowColor,
-                                  BlendMode.srcIn),
-                              semanticsLabel: 'A red up arrow');
-                        })),
+                            color: Colors.white),
+                        child: Obx(() =>
+                            Get.find<ProductController>().isFilter.value
+                                ? Icon(Icons.close)
+                                : SvgPicture.asset("assets/filter.svg",
+                                    width: 15,
+                                    height: 15,
+                                    colorFilter: ColorFilter.mode(
+                                        Theme.of(context).selectedRowColor,
+                                        BlendMode.srcIn),
+                                    semanticsLabel: 'A red up arrow'))),
                   ),
                 )
               ],
@@ -141,9 +138,11 @@ class _HomePageState extends State<HomePage> {
                                   });
                                   Get.find<ProductController>()
                                       .getProductBycate(selectedCategory);
+                                  print("1");
                                   print(Get.find<ProductController>()
-                                      .getCategoryProduct
-                                      .value);
+                                      .category[index]);
+                                  print("2");
+                                  print(selectedCategory);
                                 },
                                 child: Obx(
                                   () => AnimatedContainer(

@@ -20,7 +20,7 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   void initState() {
     Get.find<ProductController>().getFavoriteProduct();
-    print(Get.find<ProductController>().favoriteProduct);
+
     super.initState();
   }
 

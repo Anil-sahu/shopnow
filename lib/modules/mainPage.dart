@@ -13,6 +13,7 @@ import 'package:shopnow/modules/productDatail/details.dart';
 import 'package:shopnow/modules/widgets/CustomeTextFileds.dart';
 import 'package:shopnow/modules/widgets/ProductCard.dart';
 import 'package:shopnow/modules/widgets/coursoleCard.dart';
+import 'package:shopnow/modules/widgets/shimmerEffect.dart';
 
 import '../models/product/producModel.dart';
 import 'AddToCard/MyCard.dart';
@@ -65,87 +66,6 @@ class _MainPageState extends State<MainPage>
     );
   }
 
-  smimmersEffect() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 204,
-      // padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      child: Obx(
-        () => Shimmer.fromColors(
-          baseColor: Theme.of(context).backgroundColor,
-          highlightColor: Colors.white,
-          enabled: Get.find<ProductController>().isLoading.value,
-          child: Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (_, __) => Expanded(
-                child: Stack(
-                  // crossAxisAlign///////ment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      child: CarouselSlider(
-                        items: [
-                          Container(
-                            width: MediaQuery.of(context).size.width - 100,
-                            height: 100,
-                            color: Colors.white,
-                          )
-                        ],
-                        options: CarouselOptions(
-                          aspectRatio: 16 / 9,
-                          viewportFraction: 0.8,
-                          initialPage: 0,
-                          autoPlay: true,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          height: 140,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: MasonryGridView.count(
-                        shrinkWrap: true,
-                        itemCount: 100,
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        itemBuilder: (context, index) {
-                          return Expanded(
-                            child: Card(
-                              elevation: 10,
-                              shadowColor:
-                                  const Color.fromARGB(75, 131, 131, 131),
-                              clipBehavior: Clip.hardEdge,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 500),
-                                height: index % 2 == 0 ? 200 : 220,
-                                decoration:
-                                    const BoxDecoration(color: Colors.white),
-                                child: Container(
-                                  height: 100,
-                                  width: 100,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -174,7 +94,7 @@ class _MainPageState extends State<MainPage>
         ],
       ),
       body: Obx(() => Get.find<ProductController>().isLoading.value
-          ? smimmersEffect()
+          ? ShimmerEffect()
           : pages[_selectedIndex]),
       bottomNavigationBar: GNav(
         backgroundColor: Colors.white,

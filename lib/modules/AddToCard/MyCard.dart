@@ -18,6 +18,7 @@ class _MyCardState extends State<MyCard> {
   @override
   void initState() {
     Get.find<ProductController>().getCardProduct();
+    Get.find<ProductController>().getCard();
     super.initState();
   }
 

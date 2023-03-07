@@ -34,14 +34,14 @@ class RemoteService {
     }
   }
 
-  static searchProduct(product) async {
-    var url = " https://dummyjson.com/products/search?q=$product";
+  static Future<Product?> searchProduct(product) async {
+    var url = "https://dummyjson.com/products/search?q=$product";
     try {
       var response = await http.Client().get(Uri.parse(url));
       if (response.statusCode == 200) {
         var decode = jsonDecode(response.body);
-        return decode;
-      }
+        return productFromJson(response.body);
+      } else {}
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -54,7 +54,7 @@ class RemoteService {
           await http.Client().get(Uri.parse(url)).whenComplete(() {});
       var decode = jsonDecode(response.body);
 
-      return decode;
+      return productFromJson(response.body);
     } catch (e) {
       debugPrint(e.toString());
     }
