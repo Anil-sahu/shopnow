@@ -29,42 +29,78 @@ class _MyCardState extends State<MyCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-              child: Obx(
-            () => MasonryGridView.count(
-              itemCount: Get.find<ProductController>().cardList.length,
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              itemBuilder: (context, index) {
-                return InkWell(
-                    onTap: () {
-                      Get.to(() => ProductDetail(
-                            product:
-                                Get.find<ProductController>().cardList[index],
-                            fave: "card",
-                          ));
-                    },
-                    child: Expanded(
-                      child: Card(
-                        elevation: 10,
-                        shadowColor: Color.fromARGB(75, 131, 131, 131),
-                        clipBehavior: Clip.hardEdge,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: index % 2 == 0 ? 200 : 220,
-                          decoration: const BoxDecoration(color: Colors.white),
-                          child: FavoriteCard(
-                              product: Get.find<ProductController>()
-                                  .cardList[index]),
-                        ),
-                      ),
-                    ));
-              },
+            child: Obx(
+              () => ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: Get.find<ProductController>().cardList.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.network(
+                            Get.find<ProductController>().cardList[index]
+                                ['thumbnail'],
+                            width: 100,
+                          ),
+                          Column(
+                            children: [
+                              Text(Get.find<ProductController>().cardList[index]
+                                  ['title']),
+                              Text(
+                                  "\$ ${Get.find<ProductController>().cardList[index]['price'].toString()}"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.remove)),
+                              const Text("00"),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.add)),
+                            ],
+                          )
+                        ]);
+                  }),
             ),
-          ))
+            //     child: Obx(
+            //   () => MasonryGridView.count(
+            //     itemCount: Get.find<ProductController>().cardList.length,
+            //     crossAxisCount: 2,
+            //     mainAxisSpacing: 10,
+            //     crossAxisSpacing: 10,
+            //     itemBuilder: (context, index) {
+            //       return InkWell(
+            //           onTap: () {
+            //             Get.to(() => ProductDetail(
+            //                   product:
+            //                       Get.find<ProductController>().cardList[index],
+            //                   fave: "card",
+            //                 ));
+            //           },
+            //           child: Expanded(
+            //             child: Card(
+            //               elevation: 10,
+            //               shadowColor: Color.fromARGB(75, 131, 131, 131),
+            //               clipBehavior: Clip.hardEdge,
+            //               shape: RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(10),
+            //               ),
+            //               child: AnimatedContainer(
+            //                 duration: const Duration(milliseconds: 500),
+            //                 height: index % 2 == 0 ? 200 : 220,
+            //                 decoration: const BoxDecoration(color: Colors.white),
+            //                 child: FavoriteCard(
+            //                     product: Get.find<ProductController>()
+            //                         .cardList[index]),
+            //               ),
+            //             ),
+            //           ));
+            //     },
+            //   ),
+            // ))
+          )
         ],
       ),
     );

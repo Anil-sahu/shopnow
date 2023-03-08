@@ -28,6 +28,6 @@ class SharePreferenceService {
 
   Future<List<String>?> getSaveCard() async {
     SharedPreferences preferences = await _prefs;
-    return preferences.getStringList("favorite");
+    return preferences.getStringList("card");
   }
 }

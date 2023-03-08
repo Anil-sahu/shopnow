@@ -231,7 +231,7 @@ class _ProductDetailState extends State<ProductDetail> {
             alignment: Alignment.topRight,
             children: [
               FloatingActionButton.extended(
-                  heroTag: "carrd",
+                  heroTag: "card",
                   backgroundColor: const Color.fromARGB(255, 15, 46, 71),
                   onPressed: () {},
                   label: Stack(alignment: Alignment.topRight, children: [
@@ -262,7 +262,9 @@ class _ProductDetailState extends State<ProductDetail> {
               heroTag: "add to card",
               backgroundColor: const Color.fromARGB(255, 15, 46, 71),
               onPressed: () {
-                sps.saveToCard(widget.product.id);
+                sps.saveToCard(widget.fave != null
+                    ? widget.product['id']
+                    : widget.product.id);
               },
               label: Row(children: [
                 Obx(() => Get.find<ProductController>().addToCardList.contains(
@@ -271,7 +273,12 @@ class _ProductDetailState extends State<ProductDetail> {
                             : widget.product.id.toString())
                     ? const Icon(Icons.check)
                     : const Icon(Icons.add_rounded)),
-                const Text("Add to card")
+                Obx(() => Get.find<ProductController>().addToCardList.contains(
+                        widget.fave != null
+                            ? widget.product['id']
+                            : widget.product.id.toString())
+                    ? const Text("Remove from Card")
+                    : const Text("Add to card"))
               ])),
         ],
       ),
