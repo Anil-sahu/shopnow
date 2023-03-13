@@ -138,11 +138,6 @@ class _HomePageState extends State<HomePage> {
                                   });
                                   Get.find<ProductController>()
                                       .getProductBycate(selectedCategory);
-                                  print("1");
-                                  print(Get.find<ProductController>()
-                                      .category[index]);
-                                  print("2");
-                                  print(selectedCategory);
                                 },
                                 child: Obx(
                                   () => AnimatedContainer(
@@ -152,19 +147,11 @@ class _HomePageState extends State<HomePage> {
                                     margin: const EdgeInsets.only(
                                         left: 20, bottom: 15),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: selectedCategory ==
-                                                    Get.find<
-                                                            ProductController>()
-                                                        .category[index]
-                                                ? 2
-                                                : 0,
-                                            color: Theme.of(context)
-                                                .selectedRowColor),
                                         borderRadius: BorderRadius.circular(12),
-                                        color: selectedCategory ==
-                                                Get.find<ProductController>()
+                                        color: Get.find<ProductController>()
                                                     .category[index]
+                                                    .toString() ==
+                                                selectedCategory
                                             ? Theme.of(context).selectedRowColor
                                             : Colors.white),
                                     child: Center(

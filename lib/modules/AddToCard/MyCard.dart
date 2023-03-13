@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:shopnow/modules/widgets/favoriteCard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopnow/modules/buyProduct/BuyProduct.dart';
 
 import '../../controllers/ProductController.dart';
-import '../productDatail/details.dart';
-import '../widgets/ProductCard.dart';
+import '../../localstorage/sharePreferences.dart';
 
 class MyCard extends StatefulWidget {
   const MyCard({super.key});
@@ -15,10 +14,16 @@ class MyCard extends StatefulWidget {
 }
 
 class _MyCardState extends State<MyCard> {
+  SharePreferenceService sps = SharePreferenceService();
+  var totalPayableAmount = 0;
+
   @override
   void initState() {
+    // payAbleAmount();
+    Get.find<ProductController>().payAbleAmount();
     Get.find<ProductController>().getCardProduct();
     Get.find<ProductController>().getCard();
+
     super.initState();
   }
 
@@ -34,73 +39,78 @@ class _MyCardState extends State<MyCard> {
                   shrinkWrap: true,
                   itemCount: Get.find<ProductController>().cardList.length,
                   itemBuilder: (context, index) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.network(
-                            Get.find<ProductController>().cardList[index]
-                                ['thumbnail'],
-                            width: 100,
-                          ),
-                          Column(
-                            children: [
-                              Text(Get.find<ProductController>().cardList[index]
-                                  ['title']),
-                              Text(
-                                  "\$ ${Get.find<ProductController>().cardList[index]['price'].toString()}"),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.remove)),
-                              const Text("00"),
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.add)),
-                            ],
-                          )
-                        ]);
+                    return Container(
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.network(
+                              Get.find<ProductController>().cardList[index]
+                                  ['thumbnail'],
+                              width: 100,
+                              height: 100,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Column(
+                                children: [
+                                  Text(Get.find<ProductController>()
+                                      .cardList[index]['title']),
+                                  Text(
+                                    "\$ ${Get.find<ProductController>().cardList[index]['price'].toString()}",
+                                    style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Get.find<ProductController>().removeAmount(
+                                    int.parse(Get.find<ProductController>()
+                                        .cardList[index]['price']
+                                        .toString()));
+                                sps.saveToCard(Get.find<ProductController>()
+                                    .cardList[index]['id']);
+                                setState(() {
+                                  totalPayableAmount -= int.parse(
+                                      Get.find<ProductController>()
+                                          .cardList[index]['price']
+                                          .toString());
+                                });
+                              },
+                              icon: const Icon(Icons.cancel),
+                            )
+                          ]),
+                    );
                   }),
             ),
-            //     child: Obx(
-            //   () => MasonryGridView.count(
-            //     itemCount: Get.find<ProductController>().cardList.length,
-            //     crossAxisCount: 2,
-            //     mainAxisSpacing: 10,
-            //     crossAxisSpacing: 10,
-            //     itemBuilder: (context, index) {
-            //       return InkWell(
-            //           onTap: () {
-            //             Get.to(() => ProductDetail(
-            //                   product:
-            //                       Get.find<ProductController>().cardList[index],
-            //                   fave: "card",
-            //                 ));
-            //           },
-            //           child: Expanded(
-            //             child: Card(
-            //               elevation: 10,
-            //               shadowColor: Color.fromARGB(75, 131, 131, 131),
-            //               clipBehavior: Clip.hardEdge,
-            //               shape: RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(10),
-            //               ),
-            //               child: AnimatedContainer(
-            //                 duration: const Duration(milliseconds: 500),
-            //                 height: index % 2 == 0 ? 200 : 220,
-            //                 decoration: const BoxDecoration(color: Colors.white),
-            //                 child: FavoriteCard(
-            //                     product: Get.find<ProductController>()
-            //                         .cardList[index]),
-            //               ),
-            //             ),
-            //           ));
-            //     },
-            //   ),
-            // ))
           )
+        ],
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          FloatingActionButton.extended(
+              heroTag: "payAbleAmount",
+              backgroundColor: const Color.fromARGB(255, 15, 46, 71),
+              onPressed: () {},
+              label: Obx(() {
+                return Text(
+                    "\$ ${Get.find<ProductController>().totalPayAbleAmount}");
+              })),
+          FloatingActionButton.extended(
+              heroTag: "checkout",
+              backgroundColor: const Color.fromARGB(255, 15, 46, 71),
+              onPressed: () {
+                Get.to(() => BuyProduct());
+              },
+              label: const Text("Check out")),
         ],
       ),
     );

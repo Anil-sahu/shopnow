@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopnow/localstorage/sharePreferences.dart';
 import 'package:shopnow/services/remote_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductController extends GetxController {
   var allProduct = [].obs;
@@ -15,6 +14,7 @@ class ProductController extends GetxController {
   var cardList = [].obs;
   var favoriteList = <String>[].obs;
   var favoriteProduct = [].obs;
+  var totalPayAbleAmount = 0.obs;
 
   var isLoading = false.obs;
   var isSearch = false.obs;
@@ -51,6 +51,22 @@ class ProductController extends GetxController {
     isLoading.value = false;
   }
 
+  addAmount(int amount) {
+    totalPayAbleAmount.value += amount;
+  }
+
+  removeAmount(int amount) {
+    totalPayAbleAmount.value -= amount;
+  }
+
+  payAbleAmount() {
+    totalPayAbleAmount.value = 0;
+    for (var i = 0; i < Get.find<ProductController>().cardList.length; i++) {
+      addAmount(int.parse(
+          Get.find<ProductController>().cardList[i]['price'].toString()));
+    }
+  }
+
   List get products {
     if (isSearch.value) {
       return [...productSearchList.value];
@@ -69,6 +85,7 @@ class ProductController extends GetxController {
     } else {
       favoriteList.add(id.toString());
     }
+    getFaverit();
   }
 
   getFaverit() async {
@@ -81,6 +98,7 @@ class ProductController extends GetxController {
     } else {
       addToCardList.add(id.toString());
     }
+    getCard();
   }
 
   getCard() async {
