@@ -25,7 +25,7 @@ class _BuyProductState extends State<BuyProduct> {
 
   @override
   void initState() {
-    Get.find<ProductController>().payAbleAmount();
+    // Get.find<ProductController>().payAbleAmount();
     _upiIndia.getAllUpiApps(mandatoryTransactionId: false).then((value) {
       apps = value;
     }).catchError((e) {
@@ -196,7 +196,7 @@ class _BuyProductState extends State<BuyProduct> {
                   );
                 } else {
                   return const Center(
-                    child: Text(''),
+                    child: Text('No'),
                   );
                 }
               },

@@ -77,12 +77,11 @@ class _MyCardState extends State<MyCard> {
                                         .toString()));
                                 sps.saveToCard(Get.find<ProductController>()
                                     .cardList[index]['id']);
-                                setState(() {
-                                  totalPayableAmount -= int.parse(
-                                      Get.find<ProductController>()
-                                          .cardList[index]['price']
-                                          .toString());
-                                });
+
+                                totalPayableAmount -= int.parse(
+                                    Get.find<ProductController>()
+                                        .cardList[index]['price']
+                                        .toString());
                               },
                               icon: const Icon(Icons.cancel),
                             )

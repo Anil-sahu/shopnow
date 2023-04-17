@@ -31,7 +31,8 @@ class _MainPageState extends State<MainPage>
   static const List<Widget> pages = <Widget>[
     HomePage(),
     FavoritePage(),
-    MyCard()
+    MyCard(),
+    Center(child: Text("Profile"),)
   ];
 
   @override
@@ -94,7 +95,7 @@ class _MainPageState extends State<MainPage>
         ],
       ),
       body: Obx(() => Get.find<ProductController>().isLoading.value
-          ? ShimmerEffect()
+          ? const ShimmerEffect()
           : pages[_selectedIndex]),
       bottomNavigationBar: GNav(
         backgroundColor: Colors.white,
@@ -104,7 +105,7 @@ class _MainPageState extends State<MainPage>
         activeColor: Theme.of(context).selectedRowColor,
         iconSize: 24,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        tabMargin: EdgeInsets.only(top: 10, bottom: 10),
+        tabMargin: const EdgeInsets.only(top: 10, bottom: 10),
         duration: const Duration(milliseconds: 400),
         tabBackgroundColor: Colors.grey[100]!,
         color: const Color.fromARGB(255, 15, 46, 71),
